@@ -71,3 +71,49 @@ def pregunta_01():
 
 
     """
+
+    import os
+    import zipfile
+    import pandas as pd
+
+    # Define the input and output directories
+    input_dir = 'files\\input'
+    output_dir = 'files\\output'
+
+    # Extract the zip file
+    zip_path = 'files/input.zip'
+    if os.path.exists(zip_path):
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall('files')
+    
+    # Create the output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Initialize lists to hold data
+    train_data = []
+    test_data = []
+
+    # Function to process files in a given directory
+    def process_files(directory, data_list):
+        for target in ['positive', 'negative', 'neutral']:
+            target_dir = os.path.join(directory, target)
+            for filename in os.listdir(target_dir):
+                if filename.endswith('.txt'):
+                    file_path = os.path.join(target_dir, filename)
+                    with open(file_path, 'r', encoding='utf-8') as file:
+                        phrase = file.read().strip()
+                        data_list.append({'phrase': phrase, 'target': target})
+
+    # Process training and testing datasets
+    process_files(os.path.join(input_dir, 'train'), train_data)
+    process_files(os.path.join(input_dir, 'test'), test_data)
+
+    # Create DataFrames and save to CSV files
+    train_df = pd.DataFrame(train_data)
+    test_df = pd.DataFrame(test_data)
+
+    train_df.to_csv(os.path.join(output_dir, 'train_dataset.csv'), index=False)
+    test_df.to_csv(os.path.join(output_dir, 'test_dataset.csv'), index=False)
+    
+if __name__ == "__main__":
+    pregunta_01()

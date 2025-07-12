@@ -77,8 +77,8 @@ def pregunta_01():
     import pandas as pd
 
     # Define the input and output directories
-    input_dir = 'files\\input'
-    output_dir = 'files\\output'
+    input_dir = 'files/input'
+    output_dir = 'files/output'
 
     # Extract the zip file
     zip_path = 'files/input.zip'
